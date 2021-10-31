@@ -1,3 +1,4 @@
+using ChatApp.Application;
 using ChatApp.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,6 +22,10 @@ namespace ChatApp
 			services.AddInfrastructure();
 
 			services.AddControllersWithViews();
+
+			services.AddHttpContextAccessor();
+
+			services.AddServices();
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
