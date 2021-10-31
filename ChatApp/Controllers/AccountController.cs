@@ -31,7 +31,7 @@ namespace ChatApp.Controllers
 			{
 				var user = await _userManager.FindByNameAsync(name);
 
-				if(user == null)
+				if (user == null)
 				{
 					user = new User
 					{

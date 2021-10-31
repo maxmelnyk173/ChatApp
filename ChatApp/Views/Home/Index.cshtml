@@ -49,8 +49,8 @@
 			<div class="modal-body">
 				<form method="post" id="createRoomModalForm" asp-controller="Home" asp-action="CreateRoom">
 					<div class="form-group">
-						<label for="exampleInputEmail1">Room</label>
-						<input required type="text" class="form-control" name="name" id="name" />
+						<label for="name">Room</label>
+						<input required pattern="[A-Za-z0-9_-]+" title="input format: [A-Za-z0-9_-]+" type="text" class="form-control" name="name" id="name" />
 					</div>
 				</form>
 			</div>

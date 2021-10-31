@@ -4,14 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ChatApp.Application
 {
-    public static class DependencyInjection
-    {
-        public static IServiceCollection AddServices(this IServiceCollection services)
-        {
-            services.AddScoped<IChatRepository, ChatRepository>();
-            services.AddScoped<IMessageRepository, MessageRepository>();
+	public static class DependencyInjection
+	{
+		public static IServiceCollection AddServices(this IServiceCollection services)
+		{
+			services.AddScoped<IChatRepository, ChatRepository>();
+			services.AddScoped<IMessageRepository, MessageRepository>();
 
-            return services;
-        }
-    }
+			return services;
+		}
+	}
 }
