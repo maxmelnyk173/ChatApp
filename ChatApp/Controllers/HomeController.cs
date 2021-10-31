@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ChatApp.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace ChatApp.Controllers
@@ -14,7 +15,11 @@ namespace ChatApp.Controllers
 
 		public IActionResult Index()
 		{
-			return View();
+			var model = new BaseViewModel();
+
+			model.IsAuth = User.Identity.IsAuthenticated;
+
+			return View(model);
 		}
 	}
 }
