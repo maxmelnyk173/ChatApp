@@ -1,4 +1,5 @@
 using ChatApp.Application;
+using ChatApp.Hubs;
 using ChatApp.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,6 +27,8 @@ namespace ChatApp
 			services.AddHttpContextAccessor();
 
 			services.AddServices();
+
+			services.AddSignalR();
 		}
 
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -52,6 +55,8 @@ namespace ChatApp
 				endpoints.MapControllerRoute(
 					name: "default",
 					pattern: "{controller=Home}/{action=Index}/{id?}");
+
+				endpoints.MapHub<ChatHub>("/chatHub");
 			});
 		}
 	}
