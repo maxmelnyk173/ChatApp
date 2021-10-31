@@ -1,4 +1,5 @@
-﻿using ChatApp.Domain.Entities;
+﻿using ChatApp.Application.Common;
+using ChatApp.Domain.Entities;
 using ChatApp.Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,8 @@ namespace ChatApp.Infrastructure
 		public static IServiceCollection AddInfrastructure(this IServiceCollection services)
 		{
 			services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("ChatApp"));
+
+			services.AddScoped<IAppDbContext>(provider => provider.GetService<AppDbContext>());
 
 			services.AddIdentity<User, IdentityRole>(o =>
 			{
