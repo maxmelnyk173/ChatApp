@@ -50,5 +50,18 @@ namespace ChatApp.Application.DataAccess.Chats
 				await _context.SaveChangesAsync();
 			}
 		}
+
+		public async Task AddChatUser(ChatUser model)
+		{
+			var chatUser = await _context.ChatUsers.FirstOrDefaultAsync(c => c.UserId == model.UserId
+																		  && c.ChatId == model.ChatId);
+
+			if (chatUser == null)
+			{
+				_context.ChatUsers.Add(model);
+
+				await _context.SaveChangesAsync();
+			}
+		}
 	}
 }

@@ -21,6 +21,11 @@
 					<tr>
 						<th>@chat.Name</th>
 						<th class="d-flex justify-content-end align-content-center">
+							@{ var buttonName = chat.Users.Any(u => u.UserId == Model.UserId) ? "Open" : "Join"; }
+
+							<form method="post" class="mr-2" asp-controller="Home" asp-action="JoinRoom" asp-route-id="@chat.Id">
+								<button type="submit" class="btn btn-outline-warning p-0 m-0 px-2">@buttonName</button>
+							</form>
 							<form method="post" asp-controller="Home" asp-action="DeleteRoom" asp-route-id="@chat.Id">
 								<button type="submit" class="btn btn-outline-danger p-0 m-0 px-2">Delete</button>
 							</form>

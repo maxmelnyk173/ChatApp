@@ -1,0 +1,36 @@
+﻿@model ChatApp.Models.RoomViewModel
+
+@if (Model.IsAuth)
+{
+	<div class="d-flex justify-content-center">
+		<div class="col-md-10">
+			<div>
+				<h5>@Model.Chat.Name</h5>
+			</div>
+
+			<div class="my-3 border" id="messageTable">
+				<table class="table table-borderless">
+					<tbody id="chatTable">
+						@foreach (var message in Model.Chat.Messages)
+						{
+							<tr>
+								<th class="d-flex justify-content-between">
+									<div class="col-3">@message.UserName</div>
+									<div class="col-6 font-weight-light">@message.Text</div>
+									<div class="col-3 font-weight-light">@message.Timestamp.ToString("yyyy/M/d H:m:s")</div>
+								</th>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+
+			<div class="d-flex">
+				<input hidden readonly name="roomId" value="@Model.Chat.Id" id="roomId" />
+				<input hidden readonly name="roomName" value="@Model.Chat.Name" id="roomName" />
+				<input type="text" name="text" class="form-control" id="messageText" />
+				<button type="button" class="btn btn-outline-primary" id="messageButton">Send</button>
+			</div>
+		</div>
+	</div>
+}

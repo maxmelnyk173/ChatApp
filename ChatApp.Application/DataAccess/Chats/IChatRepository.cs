@@ -14,5 +14,7 @@ namespace ChatApp.Application.DataAccess.Chats
 		public Task CreateChat(Chat model);
 
 		public Task DeleteChat(Guid id);
+
+		public Task AddChatUser(ChatUser model);
 	}
 }

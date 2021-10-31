@@ -28,6 +28,8 @@ namespace ChatApp.Controllers
 
 			if (model.IsAuth)
 			{
+				model.UserId = GetCurentUserId();
+
 				model.Chats = await _chatRepository.GetAllChats();
 			}
 
@@ -40,7 +42,9 @@ namespace ChatApp.Controllers
 		{
 			var name = HttpContext.Request.Form.FirstOrDefault().Value.ToString();
 
-			await CreateChat(name);
+			var chat = await CreateChat(name);
+
+			await AddUserToChat(chat);
 
 			return RedirectToAction("Index");
 		}
@@ -58,6 +62,17 @@ namespace ChatApp.Controllers
 			return chat;
 		}
 
+		private async Task AddUserToChat(Chat chat)
+		{
+			var userChat = new ChatUser()
+			{
+				ChatId = chat.Id,
+				UserId = GetCurentUserId()
+			};
+
+			await _chatRepository.AddChatUser(userChat);
+		}
+
 		[HttpPost]
 		[Authorize]
 		public async Task<IActionResult> DeleteRoom(Guid id)
@@ -65,6 +80,21 @@ namespace ChatApp.Controllers
 			await _chatRepository.DeleteChat(id);
 
 			return RedirectToAction("Index");
+		}
+
+		[HttpPost]
+		[Authorize]
+		public async Task<IActionResult> JoinRoom(Guid id)
+		{
+			var userChat = new ChatUser()
+			{
+				ChatId = id,
+				UserId = GetCurentUserId()
+			};
+
+			await _chatRepository.AddChatUser(userChat);
+
+			return RedirectToAction("Index", "Room", new { id });
 		}
 
 		private Guid GetCurentUserId()
