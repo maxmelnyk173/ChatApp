@@ -1,8 +1,57 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model ChatApp.Models.HomeViewModel
+@{
+	ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@if (Model.IsAuth)
+{
+	<div class="d-flex justify-content-center">
+		<table class="table table-hover col-md-10">
+			<thead>
+				<tr>
+					<th>Rooms</th>
+					<th class="text-right">
+						<button class="btn btn-outline-success p-0 m-0 px-2" data-toggle="modal" data-target="#createRoomModal">Create</button>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var chat in Model.Chats)
+				{
+					<tr>
+						<th>@chat.Name</th>
+						<th class="d-flex justify-content-end align-content-center">
+							<form method="post" asp-controller="Home" asp-action="DeleteRoom" asp-route-id="@chat.Id">
+								<button type="submit" class="btn btn-outline-danger p-0 m-0 px-2">Delete</button>
+							</form>
+						</th>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+}
+
+<div class="modal fade" id="createRoomModal" tabindex="-1" role="dialog" aria-labelledby="createRoomModal" aria-hidden="true">
+	<div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Create Room</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="post" id="createRoomModalForm" asp-controller="Home" asp-action="CreateRoom">
+					<div class="form-group">
+						<label for="exampleInputEmail1">Room</label>
+						<input required type="text" class="form-control" name="name" id="name" />
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" form="createRoomModalForm" class="btn btn-outline-success">Create</button>
+			</div>
+		</div>
+	</div>
 </div>

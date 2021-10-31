@@ -1,25 +1,75 @@
-﻿using ChatApp.Models;
+﻿using ChatApp.Application.DataAccess.Chats;
+using ChatApp.Domain.Entities;
+using ChatApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace ChatApp.Controllers
 {
 	public class HomeController : Controller
 	{
-		private readonly ILogger<HomeController> _logger;
+		private readonly IChatRepository _chatRepository;
 
-		public HomeController(ILogger<HomeController> logger)
+		public HomeController(IChatRepository chatRepository)
 		{
-			_logger = logger;
+			_chatRepository = chatRepository;
 		}
 
-		public IActionResult Index()
+		[HttpGet]
+		public async Task<IActionResult> Index()
 		{
-			var model = new BaseViewModel();
+			var model = new HomeViewModel();
 
 			model.IsAuth = User.Identity.IsAuthenticated;
 
+			if (model.IsAuth)
+			{
+				model.Chats = await _chatRepository.GetAllChats();
+			}
+
 			return View(model);
+		}
+
+		[HttpPost]
+		[Authorize]
+		public async Task<IActionResult> CreateRoom()
+		{
+			var name = HttpContext.Request.Form.FirstOrDefault().Value.ToString();
+
+			await CreateChat(name);
+
+			return RedirectToAction("Index");
+		}
+
+		private async Task<Chat> CreateChat(string name)
+		{
+			var chat = new Chat()
+			{
+				Id = Guid.NewGuid(),
+				Name = name
+			};
+
+			await _chatRepository.CreateChat(chat);
+
+			return chat;
+		}
+
+		[HttpPost]
+		[Authorize]
+		public async Task<IActionResult> DeleteRoom(Guid id)
+		{
+			await _chatRepository.DeleteChat(id);
+
+			return RedirectToAction("Index");
+		}
+
+		private Guid GetCurentUserId()
+		{
+			return Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
 		}
 	}
 }
